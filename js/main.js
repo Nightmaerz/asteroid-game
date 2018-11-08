@@ -48,6 +48,29 @@ var GameItem = (function () {
     };
     return GameItem;
 }());
+var asteroid = (function (_super) {
+    __extends(asteroid, _super);
+    function asteroid(name, xPosition, yPosition) {
+        if (xPosition === void 0) { xPosition = 0; }
+        if (yPosition === void 0) { yPosition = 0; }
+        return _super.call(this, name, xPosition, yPosition) || this;
+    }
+    asteroid.prototype.draw = function (container) {
+        this._element = document.createElement('div');
+        this._element.className = this._name;
+        this._element.id = this._name + "-" + this._id;
+        this._element.style.transform = "translate(" + (-1000 + 100 * Math.floor(Math.random() * 20) + 1) + "px, " + this._yPos + "px)";
+        var image = document.createElement('img');
+        image.src = "./assets/images/" + this._name + ".png ";
+        this._element.appendChild(image);
+        container.appendChild(this._element);
+    };
+    asteroid.prototype.remove = function (container) {
+        var elem = document.getElementById(this._name + "-" + this._id);
+        container.removeChild(elem);
+    };
+    return asteroid;
+}(GameItem));
 var Character = (function (_super) {
     __extends(Character, _super);
     function Character(name, xPosition, yPosition, id) {
@@ -105,41 +128,34 @@ var Game = (function () {
                 _this.update();
             }
             if (e.keyCode === 37) {
-                _this._char.movex(50);
+                _this._char.movex(-50);
                 _this.update();
             }
             if (e.keyCode === 39) {
-                _this._char.movex(-50);
+                _this._char.movex(50);
                 _this.update();
             }
         };
         this._char = new Character('char');
-        this._coin = new Coin('coin', 0);
         this._scoreboard = new Scoreboard('scoreboard');
+        this._asteroid = new asteroid("asteroid");
         window.addEventListener('keydown', this.keyDownHandler);
         this.draw();
     }
     Game.prototype.collision = function () {
-        var coinRect = document.getElementById('coin-0').getBoundingClientRect();
         var charRect = document.getElementById('char').getBoundingClientRect();
-        if (coinRect.bottom >= charRect.top) {
-            this._coin.remove(this._element);
-            window.removeEventListener('keydown', this.keyDownHandler);
-            this._scoreboard.addScore();
-        }
-        else {
-            console.log('no collision');
-        }
     };
     Game.prototype.draw = function () {
+        var _this = this;
         this._char.draw(this._element);
-        this._coin.draw(this._element);
         this._scoreboard.draw(this._element);
+        setInterval(function () {
+            return _this._asteroid.draw(_this._element);
+        }, 5000);
     };
     Game.prototype.update = function () {
         this.collision();
         this._char.update();
-        this._coin.update();
         this._scoreboard.update();
     };
     Game.prototype.theLoop = function () {

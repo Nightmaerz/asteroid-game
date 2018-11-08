@@ -4,6 +4,7 @@ class Game {
   private _char: Character;
   private _coin: Coin; //use an array if you have multiple gameItems of the same sort
   private _scoreboard: Scoreboard;
+  private _asteroid: asteroid;
 
   /**
    * Create the Game class
@@ -11,7 +12,8 @@ class Game {
   constructor() {
     //create some gameItems
     this._char = new Character('char');
-      this._scoreboard = new Scoreboard('scoreboard');
+    this._scoreboard = new Scoreboard('scoreboard');
+    this._asteroid = new asteroid("asteroid");
       
 
     //add keydown handler to the window object
@@ -26,9 +28,8 @@ class Game {
    */
   public collision(): void {
     //use elem.getBoundingClientRect() for getting the wright coordinates and measurements of the element
-    const coinRect = document.getElementById('coin-0').getBoundingClientRect();
     const charRect = document.getElementById('char').getBoundingClientRect();
-
+/*
     if (coinRect.bottom >= charRect.top) {
       this._coin.remove(this._element);
       window.removeEventListener('keydown', this.keyDownHandler);
@@ -36,6 +37,7 @@ class Game {
     } else {
       console.log('no collision');
     }
+*/
   }
 
   /**
@@ -43,8 +45,11 @@ class Game {
    */
   public draw(): void {
     this._char.draw(this._element);
-    this._coin.draw(this._element);
     this._scoreboard.draw(this._element);
+    setInterval(
+      () => 
+      this._asteroid.draw(this._element), 5000
+      );
   }
 
   /**
@@ -53,7 +58,6 @@ class Game {
   public update(): void { //function formerly known as render()
     this.collision();
     this._char.update();
-    this._coin.update();
     this._scoreboard.update();
   }
 
@@ -80,15 +84,9 @@ class Game {
       
     }
     }
-    public createAsteroid(){
-      
-    }
-    
-    public genAsteroids(){
-      setInterval( createAsteroid(), 3000 )
-    }
 
     
+        
     public theLoop() {
         var n = 0;
         var a = -200;
