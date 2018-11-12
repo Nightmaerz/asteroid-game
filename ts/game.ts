@@ -29,15 +29,11 @@ class Game {
   public collision(): void {
     //use elem.getBoundingClientRect() for getting the wright coordinates and measurements of the element
     const charRect = document.getElementById('char').getBoundingClientRect();
-/*
-    if (coinRect.bottom >= charRect.top) {
-      this._coin.remove(this._element);
-      window.removeEventListener('keydown', this.keyDownHandler);
-      this._scoreboard.addScore();
-    } else {
-      console.log('no collision');
+    const asteroidRect = document.getElementById('asteroid').getBoundingClientRect();
+
+    if(asteroidRect.bottom >= charRect.top){
+      this._asteroid.remove(this._element);      
     }
-*/
   }
 
   /**
